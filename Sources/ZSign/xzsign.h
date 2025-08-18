@@ -8,6 +8,8 @@
 #ifndef zsign_h
 #define zsign_h
 
+void ZLog_SetCallback(void (*callback)(const char* log));
+
 #ifdef __cplusplus
 extern "C"
 {

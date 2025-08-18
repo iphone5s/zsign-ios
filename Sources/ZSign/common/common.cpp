@@ -694,6 +694,12 @@ uint64_t ZTimer::PrintResult(bool bSuccess, const char *szFormatArgs, ...)
 	return Reset();
 }
 
+static void (*g_logCallback)(const char* log) = nullptr;
+
+extern "C" void ZLog_SetCallback(void (*callback)(const char* log)) {
+    g_logCallback = callback;
+}
+
 int ZLog::g_nLogLevel = ZLog::E_INFO;
 
 void ZLog::SetLogLever(int nLogLevel)
@@ -703,6 +709,10 @@ void ZLog::SetLogLever(int nLogLevel)
 
 void ZLog::Print(int nLevel, const char *szLog)
 {
+    if (g_logCallback) {
+        g_logCallback(szLog);
+        return;
+    }
 	if (g_nLogLevel >= nLevel)
 	{
 		write(STDOUT_FILENO, szLog, strlen(szLog));
