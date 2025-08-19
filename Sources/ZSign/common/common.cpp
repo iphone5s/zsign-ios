@@ -803,6 +803,10 @@ void ZLog::PrintV(const char *szFormatArgs, ...)
 	if (g_nLogLevel >= E_INFO)
 	{
 		PARSEVALIST(szFormatArgs, szLog)
+        if (g_logCallback) {
+            g_logCallback(szLog);
+            return;
+        }
 		write(STDOUT_FILENO, szLog, strlen(szLog));
 	}
 }
